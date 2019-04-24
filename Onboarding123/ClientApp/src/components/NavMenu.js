@@ -18,30 +18,27 @@ export class NavMenu extends Component {
         </Navbar.Header>
         <Navbar.Collapse>
           <Nav>
-            <LinkContainer to={'/'} exact>
-              <NavItem>
-                <Glyphicon glyph='home' /> Home
-              </NavItem>
-            </LinkContainer>
-         
-                    <LinkContainer to={'/fetchCustomer'}>
+                    <LinkContainer to={'/fetchCustomer1'}>
                         <NavItem>
-                            <Glyphicon glyph='th-list' /> Customer
+                            <Glyphicon glyph='th-list' /> Customer 
               </NavItem>
                     </LinkContainer>
-                    <LinkContainer to={'/fetchProduct'}>
+         
+                    
+             
+                    <LinkContainer to={'/fetchProduct1'}>
                         <NavItem>
                             <Glyphicon glyph='th-list' /> Product
               </NavItem>
                     </LinkContainer>
 
-                    <LinkContainer to={'/fetchStore'}>
+                    <LinkContainer to={'/fetchStore1'}>
                         <NavItem>
                             <Glyphicon glyph='th-list' /> Store
               </NavItem>
                     </LinkContainer>
 
-                    <LinkContainer to={'/fetchSales'}>
+                    <LinkContainer to={'/fetchSales1'}>
                         <NavItem>
                             <Glyphicon glyph='th-list' /> Sale
               </NavItem>

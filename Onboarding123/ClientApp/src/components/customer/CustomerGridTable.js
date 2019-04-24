@@ -21,11 +21,12 @@ class CustomerGridTable extends React.Component {
         console.log(this.state.items);
     }
 
-    componentWillRecieveProps() {
+    componentWillReceiveProps() {
 
         console.log("inside customer grid table componentWillRecieveProps");
 
     }
+    
 
     render() {
         console.log("inside render :data s this.state.items" + JSON.stringify(this.state.items[0]) + "and " + this.state.items.length);

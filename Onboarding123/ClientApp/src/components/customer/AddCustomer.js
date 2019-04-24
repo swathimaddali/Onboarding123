@@ -14,7 +14,8 @@ import { Button, Modal } from 'react-bootstrap';
             name: '',
             address: '',
             loading: true, custdata: [],
-           show:true,
+            show: true,
+            errors: {}
         };
 
         
@@ -37,6 +38,7 @@ import { Button, Modal } from 'react-bootstrap';
         this.handleSave = this.handleSave.bind(this);     
         this.Change = this.Change.bind(this);  
         this.handleClose = this.handleClose.bind(this);
+        this.handleValidation = this.handleValidation.bind(this);
 
     }
 
@@ -55,6 +57,26 @@ import { Button, Modal } from 'react-bootstrap';
      }
 
 
+     handleValidation() {
+         console.log("inside handlevalidation");
+         let name = this.state.name;
+         let address = this.state.address;
+         let errors = {};
+         let formIsValid = true;
+         if (!name) {
+             formIsValid = false;
+             errors["name"] = "Name cannot be empty";
+         }
+         if (!address) {
+             formIsValid = false;
+             errors["address"] = "Address cannot be empty";
+         }
+
+         this.setState({ errors: errors });
+         console.log(this.state.errors["name"]);
+         return formIsValid;
+     }
+
      
 
     
@@ -72,36 +94,20 @@ import { Button, Modal } from 'react-bootstrap';
              const data = new FormData(event.target);
          console.log("handlesave:::data");
              // PUT request for Edit employee.  
-            
 
-          /*   if (this.state.salesdata.id) {
-                 fetch('Customer/Edit/' + this.state.salesdata.id, {
-                     method: 'PUT',
-                     body: data,
-                     headers: {'Content-Type':'application/json'}
-            }).then((response) => 
-                 {
-                    this.props.history.push("/fetchCustomer");
-                })
-        }*/
+         if (this.handleValidation()) {
+             // alert("Form submitted");
+         } else {
+             this.setState({ loading: false });
+             return;
+         }
+
+
+          
 
              if (this.state.custdata.id) {
                  console.log("calling ajax");
-                 /*
-                 $.ajax({
-                     url: 'Customer/Edit/' + this.state.salesdata.id,
-                     type: 'PUT',
-                     dataType: 'json',
-                     success: function (result) {
-                         alert("success");
-                         console.log("edit success" + result);
-                                // eslint-disable-next-line
-                         console.log("this.props.history :::" + this.props.history);
-                         this.props.history.push("/fetchCustomer");
-                     },
-                     error: function (error) { console.log("edit fail" + error); }
-                 });
-                 */
+        
 
 
                  var formData = {
@@ -167,14 +173,15 @@ import { Button, Modal } from 'react-bootstrap';
                                  < div className="form-group row" >
                                      <label className=" control-label col-md-12" htmlFor="Name">Name</label>
                                      <div className="col-md-4">
-                                         <input className="form-control" type="text" name="name" defaultValue={this.state.custdata.name} required onChange={this.Change} />
+                                         <input className="form-control" type="text" autoComplete="off" name="name" defaultValue={this.state.custdata.name} required onChange={this.Change} />
+                                         <span style={{ color: "red" }}>{this.state.errors["name"]}</span>
                                      </div>
                                  </div >
                                  < div className="form-group row" >
                                      <label className=" control-label col-md-12" htmlFor="Address">Address</label>
                                      <div className="col-md-4">
-                                         <input className="form-control" type="text" name="address" defaultValue={this.state.custdata.address} required onChange={this.Change} />
-
+                                         <input className="form-control" type="text" name="address" autoComplete="off" defaultValue={this.state.custdata.address} required onChange={this.Change} />
+                                         <span style={{ color: "red" }}>{this.state.errors["address"]}</span>
 
                                      </div>
                                  </div >

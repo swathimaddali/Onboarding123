@@ -76,7 +76,11 @@ class AddSales extends React.Component {
            
         event.preventDefault();
              console.log("inside save");
-
+             if (this.state.customername == '' || this.state.productname == '' || this.state.storename == '') {
+                 alert("select all fields");
+                 this.setState({ loading: false });
+                 return;
+             }
              if (this.state.proddata.id) {
 
 
@@ -197,7 +201,7 @@ class AddSales extends React.Component {
 
         return (
             <div>
-                <Modal show={this.state.show} onHide={this.handleClose}>
+                <Modal show={this.state.showe} onHide={this.handleClose}>
                     <Modal.Header closeButton>
                         <Modal.Title>Edit Sales</Modal.Title>
                     </Modal.Header>
@@ -212,7 +216,8 @@ class AddSales extends React.Component {
                                 < div className="form-group row" >
                                     <label className=" control-label col-md-12" htmlFor="Date">Date sold</label>
                                     <div className="col-md-4">
-                                        <input className="form-control" type="text" name="dateSold" onChange={this.Change} defaultValue={this.state.dateSold} required />
+                                        <input className="form-control" type="text" name="dateSold" autoComplete="off" onChange={this.Change} defaultValue={this.state.dateSold} required />
+                                        <span style={{ color: "red" }}>{this.state.errors["dateSold"]}</span>
                                     </div>
                                 </div >
                                 < div className="form-group row" >
@@ -220,6 +225,7 @@ class AddSales extends React.Component {
                                     <div className="col-md-4">
 
                                         <select name="customername" onChange={this.Change} value={this.state.customername}> => {custnames.map(MakeItem)}</select>
+                                        <span style={{ color: "red" }}>{this.state.errors["customername"]}</span>
                                     </div>
                                 </div>
 
@@ -228,6 +234,7 @@ class AddSales extends React.Component {
                                     <div className="col-md-4">
 
                                         <select name="productname" onChange={this.Change} value={this.state.productname}> => {prodnames.map(MakeItem)}</select>
+                                        <span style={{ color: "red" }}>{this.state.errors["productname"]}</span>
                                     </div>
                                 </div>
 
@@ -240,6 +247,7 @@ class AddSales extends React.Component {
                                     <div className="col-md-4">
 
                                         <select name="storename" onChange={this.Change} value={this.state.storename}> => {storenames.map(MakeItem)}</select>
+                                        <span style={{ color: "red" }}>{this.state.errors["storename"]}</span>
                                     </div>
                                 </div>
 

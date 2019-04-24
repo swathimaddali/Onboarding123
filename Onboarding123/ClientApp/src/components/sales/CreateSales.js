@@ -19,19 +19,13 @@ class CreateSales extends React.Component {
             customername: '',
             storename: '',
             showc: true,
+            errors: {}
         }
 
 
         $.getJSON('Sales/Create/', function (data) {
 
             console.log("Add Sales" + JSON.stringify(data));
-
-            //Add Sales
-            // {
-            // "custNames": ["nagma", "fint", "Swati edited"], 
-            //"storeNames": ["samsung_westfield", "samsung_Burwood"],
-            //"prodNames": ["Mobile", "Talet", "ear"],
-            //"id": 3, "dateSold": "2018-12-10T00:00:00", "productname": "Talet", "customername": "nagma", "storename": "samsung_Burwood"
 
 
             this.setState({loading:false, proddata: data },  ()=> {
@@ -48,7 +42,7 @@ class CreateSales extends React.Component {
         this.handleSave = this.handleSave.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleChange = this.handleChange.bind(this);
-  
+        this.handleValidation = this.handleValidation.bind(this);
      
     }
 
@@ -69,19 +63,70 @@ class CreateSales extends React.Component {
 
     }
 
-    
+    handleValidation() {
+        console.log("inside handlevalidation");
+        let cname = this.state.customername;
+        let pname = this.state.productname;
+        let store = this.state.storename;
+        let date = this.state.dateSold;
+        let re = /^\d{1,2}\/\d{1,2}\/\d{4}$/;
+        let regs = [];
+        let minyear = 1902;
+        let maxyear = (new Date()).getFullYear();
+     //   let re = /^\[0-3]?[0-9]\/[01]?[0-9]\/[12][90][0-9][0-9]$/;
+
+        let errors = {};
+        let formIsValid = true;
+        if (!cname) {
+            formIsValid = false;
+            errors["customername"] = "Please select Customer";
+        }
+        if (!pname) {
+            formIsValid = false;
+            errors["productname"] = "Please select Product";
+        }
+        if (!store) {
+            formIsValid = false;
+            errors["storename"] = "Please select Store";
+        }
+        if ((!date) || !(date).match(re))
+        {
+            formIsValid = false;
+            errors["dateSold"] = "Date is not valid. Enter in format DD/MM/YYYY";
+        } else  if (regs = ((date).match(re)[0])) {
+            console.log("regs" + regs);
+            let arr = regs.split("/");
+            if (arr[0] < 1 || arr[0] > 31)
+                errors["dateSold"] = "Date is not valid";
+           else if (arr[1] < 1 || arr[1] > 12)
+                errors["dateSold"] = "Month is not valid";
+            else if (arr[2] < minyear || arr[2] > maxyear)
+                errors["dateSold"] = "Year is not valid";
+
+        }
+          
+
+        this.setState({ errors: errors });
+   
+        return formIsValid;
+    }
+
 
     handleSave(event) {
 
         event.preventDefault();
-            console.log("inside save");
-            this.setState({ loading: true });
+        console.log("inside save");
 
-        if (this.state.customername == '' || this.state.productname == '' || this.state.storename=='') {
-            alert("select all fields");
+        if (this.handleValidation()) {
+            // alert("Form submitted");
+        } else {
             this.setState({ loading: false });
             return;
         }
+
+            this.setState({ loading: true });
+
+      
 
 
             var formData = {
@@ -173,7 +218,8 @@ class CreateSales extends React.Component {
                                     < div className="form-group row" >
                                         <label className=" control-label col-md-12" htmlFor="Date">Date sold</label>
                                         <div className="col-md-4">
-                                            <input className="form-control" type="text" name="dateSold" onChange={this.handleChange} required />
+                                            <input className="form-control" type="text" name="dateSold" autoComplete="off" onChange={this.handleChange} required />
+                                            <span style={{ color: "red" }}>{this.state.errors["dateSold"]}</span>
                                         </div>
                                     </div >
                                     < div className="form-group row" >
@@ -181,6 +227,7 @@ class CreateSales extends React.Component {
                                         <div className="col-md-4">
 
                                             <select name="customername" onChange={this.handleChange} ><option value="">select </option> => {custnames.map(MakeItem)}</select>
+                                            <span style={{ color: "red" }}>{this.state.errors["customername"]}</span>
                                         </div>
                                     </div>
 
@@ -189,6 +236,8 @@ class CreateSales extends React.Component {
                                         <div className="col-md-4">
 
                                             <select name="productname" onChange={this.handleChange} ><option value="">select </option>=> {prodnames.map(MakeItem)}</select>
+                                            <span style={{ color: "red" }}>{this.state.errors["productname"]}</span>
+
                                         </div>
                                     </div>
                                     < div className="form-group row" >
@@ -196,6 +245,7 @@ class CreateSales extends React.Component {
                                         <div className="col-md-4">
 
                                             <select name="storename" onChange={this.handleChange} ><option value="">select </option> => {storenames.map(MakeItem)}</select>
+                                            <span style={{ color: "red" }}>{this.state.errors["storename"]}</span>
                                         </div>
                                     </div>
 

@@ -39,21 +39,29 @@ namespace Onboarding123.Models
                 throw;
             }
         }
+        //">SqlException: The DELETE statement conflicted with the REFERENCE constraint &quot;FK_customerId&quot;. The conflict occurred in database &quot;onborading&quot;, table &quot;dbo.Sales&quot;, column &#x27;Customerid&#x27;.&#xD;&#xA;The statement has been terminated.</h2>
 
-        public int AddCustomer(Customer cust)
+     
+
+
+        public IEnumerable<Customer> AddCustomer(Customer cust)
         {
-
             try
             {
-                db.Customer.Add(cust);
-                db.SaveChanges();
-                return 1;
+             db.Customer.Add(cust);
+             db.SaveChanges();
+
+             return db.Customer.ToList();
             }
             catch
             {
                 throw;
             }
+
+
         }
+
+
 
         public Customer GetCustomerData(int id)
         {
@@ -70,14 +78,15 @@ namespace Onboarding123.Models
 
 
 
-        public int UpdateCustomer(Customer cust)
+        public IEnumerable<Customer> UpdateCustomer(Customer cust)
         {
             try
             {
                 db.Entry(cust).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
 
                 db.SaveChanges();
-                return 1;
+
+                return  db.Customer.ToList();
             }
             catch
             {
@@ -117,14 +126,16 @@ namespace Onboarding123.Models
             }
         }
 
-        public int AddProduct(Product prod)
+
+
+        public IEnumerable<Product> AddProduct(Product prod)
         {
 
             try
             {
                 db.Product.Add(prod);
                 db.SaveChanges();
-                return 1;
+                return db.Product.ToList();
             }
             catch
             {
@@ -146,15 +157,14 @@ namespace Onboarding123.Models
         }
 
 
-
-        public int UpdateProduct(Product cust)
+       
+        public IEnumerable<Product> UpdateProduct(Product pr)
         {
             try
             {
-                db.Entry(cust).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
-
+                db.Entry(pr).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
                 db.SaveChanges();
-                return 1;
+                return db.Product.ToList(); 
             }
             catch
             {
@@ -193,6 +203,24 @@ namespace Onboarding123.Models
             }
         }
 
+
+        public IEnumerable<Store> AddStore(Store st)
+        {
+            try
+            {
+                db.Store.Add(st);
+                db.SaveChanges();
+
+                return db.Store.ToList();
+            }
+            catch
+            {
+                throw;
+            }
+
+
+        }
+        /*
         public int AddStore(Store cust)
         {
 
@@ -207,6 +235,7 @@ namespace Onboarding123.Models
                 throw;
             }
         }
+        */
 
         public Store GetStoreData(int id)
         {
@@ -222,7 +251,7 @@ namespace Onboarding123.Models
         }
 
 
-
+        /*
         public int UpdateStore(Store cust)
         {
             try
@@ -239,8 +268,24 @@ namespace Onboarding123.Models
 
 
         }
+        */
+        public IEnumerable<Store>   UpdateStore(Store st) 
+        {
+            try
+            {
+                db.Entry(st).State = Microsoft.EntityFrameworkCore.EntityState.Modified;
+
+                db.SaveChanges();
+
+                return db.Store.ToList();
+            }
+            catch
+            {
+                throw;
+            }
 
 
+        }
         public IEnumerable<Sales_new> GetAllSales()
         {
             try

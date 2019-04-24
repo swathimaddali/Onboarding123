@@ -3,19 +3,11 @@ import { Route } from 'react-router';
 import { Layout } from './components/Layout';
 import { Home } from './components/Home';
 
-import FetchCustomer from './components/customer/FetchCustomer';
-import AddCustomer from './components/customer/AddCustomer';
-import CreateCustomer from './components/customer/CreateCustomer';
-import FetchProduct from './components/product/FetchProduct';
-import AddProduct from './components/product/AddProduct';
-import CreateProduct from './components/product/CreateProduct';
-import AddStore from './components/store/AddStore';
-import FetchStore from './components/store/FetchStore';
-import CreateStore from './components/store/CreateStore';
-import FetchSales from './components/sales/FetchSales';
-import AddSales from './components/sales/AddSales';
-import CreateSales from './components/sales/CreateSales';
 
+import FetchSales1 from './components/sales1/FetchSales1';
+import FetchCustomer1 from './components/customer1/FetchCustomer1';
+import FetchProduct1 from './components/product1/FetchProduct1';
+import FetchStore1 from './components/store1/FetchStore1';
 
 
 
@@ -26,20 +18,15 @@ export default class App extends Component {
   render() {
     return (
       <Layout>
-        <Route exact path='/' component={Home} />
-      
-            <Route path='/fetchCustomer' component={FetchCustomer} />
-            <Route path='/addcustomer' component={CreateCustomer} />
-            <Route path='/customer/edit/:id' component={AddCustomer} />
-            <Route path='/fetchProduct' component={FetchProduct} />
-            <Route path='/addproduct' component={CreateProduct} />
-            <Route path='/product/edit/:id' component={AddProduct} />
-            <Route path='/fetchStore' component={FetchStore} />
-            <Route path='/addStore' component={CreateStore} />
-            <Route path='/store/edit/:id' component={AddStore} />
-            <Route path='/fetchSales' component={FetchSales} />
-            <Route path='/addsales' component={CreateSales} />
-            <Route path='/sales/edit/:id' component={AddSales} />
+            <Route exact path='/' component={FetchCustomer1} />
+            <Route path='/fetchCustomer1' component={FetchCustomer1} />     
+         
+            <Route path='/fetchProduct1' component={FetchProduct1} />
+            
+            <Route path='/fetchStore1' component={FetchStore1} />
+        
+            <Route path='/fetchSales1' component={FetchSales1} />
+          
       </Layout>
     );
   }

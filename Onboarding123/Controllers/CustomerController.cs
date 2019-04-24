@@ -32,18 +32,19 @@ namespace Onboarding123.Controllers
         //https://localhost:44394/Customer/Delete/1
         [HttpDelete]
         [Route("Delete/{id}")]
-       
-        public JsonResult Delete(int id)
+
+        public IEnumerable<Customer> Delete(int id)
         {
             // System.Diagnostics.Debug.WriteLine("inside CustomerController:::delete::" + objcustomer.DeleteCustomer(id));
 
-            if (objcustomer.DeleteCustomer(id) == 1)
-                return Json(new { success = true, responseText = "succesfully deleted" });
-            else return Json(new { success = false, responseText = "failed" });
+            objcustomer.DeleteCustomer(id);
+            return objcustomer.GetAllCustomers();
+          
+
 
         }
 
-        
+
         // GET https://localhost:44394/Customer/Details/2 
         // GET: Customer/Details/5
 
@@ -51,7 +52,7 @@ namespace Onboarding123.Controllers
 
 
 
-        
+
 
 
 
@@ -66,19 +67,14 @@ namespace Onboarding123.Controllers
         [HttpPut]
         [Route("Edit/{id}")]
 
-        public JsonResult Edit([FromForm]Customer customer)
+        public IEnumerable<Customer> Edit([FromForm]Customer customer)
         {
             // TODO: Add update logic here
 
-            if (!ModelState.IsValid)
-            {
-                return Json(new { success = false, responseText = "failed" });
-            }
 
-            if (objcustomer.UpdateCustomer(customer) == 1)
 
-                return Json(new { success = true, responseText = "succesfully updated" });
-            return Json(new { success = false, responseText = "failed" });
+            return (objcustomer.UpdateCustomer(customer)) ;
+                
 
         }
 
@@ -152,36 +148,14 @@ namespace Onboarding123.Controllers
         //FromForm works  body: contentType: "application/x-www-form-urlencoded",
         [HttpPost]
         [Route("Create")]
-        public JsonResult Create([FromForm] Customer product)
+        public IEnumerable<Customer> Create([FromForm] Customer customer)
         {
-            if (!ModelState.IsValid)
-            {
-                 return Json( new { success = false, responseText = "failed" });
-            }
 
-           if( objcustomer.AddCustomer(product)==1)
-
-            return Json(new { success = true, responseText = "succesfully created" });
-            return Json(new { success = false, responseText = "failed" });
-
+            return (objcustomer.AddCustomer(customer));
 
         }
 
-
-
-        [HttpPost]
-        [Route("CreateDummy")]
-        public JsonResult CreateDummy([FromForm] Customer c)
-        {
-            
-              
-
-         return Json(new { success = true, responseText = "succesfully created" });
-          
-
-
-        }
-
+        
 
 
 

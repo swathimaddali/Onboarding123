@@ -44,19 +44,12 @@ namespace Onboarding123.Controllers
         [HttpPut]
         [Route("Edit/{id}")]
 
-        public JsonResult Edit([FromForm]Store product)
+        public IEnumerable<Store> Edit([FromForm]Store product)
         {
-            // TODO: Add update logic here
+      
+            return objproduct.UpdateStore(product) ;
 
-            if (!ModelState.IsValid)
-            {
-                return Json(new { success = false, responseText = "failed" });
-            }
-
-            if (objproduct.UpdateStore(product) == 1)
-
-                return Json(new { success = true, responseText = "succesfully updated" });
-            return Json(new { success = false, responseText = "failed" });
+              
 
         }
 
@@ -67,18 +60,11 @@ namespace Onboarding123.Controllers
         //FromForm works  body: contentType: "application/x-www-form-urlencoded",
         [HttpPost]
         [Route("Create")]
-        public JsonResult Create([FromForm] Store product)
+        public IEnumerable<Store> Create([FromForm] Store product)
         {
-            if (!ModelState.IsValid)
-            {
-                return Json(new { success = false, responseText = "failed" });
-            }
+            return objproduct.AddStore(product);
 
-            if (objproduct.AddStore(product) == 1)
-
-                return Json(new { success = true, responseText = "succesfully created" });
-            return Json(new { success = false, responseText = "failed" });
-
+             
 
         }
 
@@ -87,13 +73,12 @@ namespace Onboarding123.Controllers
         [HttpDelete]
         [Route("Delete/{id}")]
 
-        public JsonResult Delete(int id)
+        public IEnumerable<Store> Delete(int id)
         {
             // System.Diagnostics.Debug.WriteLine("inside CustomerController:::delete::" + objcustomer.DeleteCustomer(id));
 
-            if (objproduct.DeleteStore(id) == 1)
-                return Json(new { success = true, responseText = "succesfully deleted" });
-            else return Json(new { success = false, responseText = "failed" });
+            objproduct.DeleteStore(id) ;
+            return objproduct.GetAllStores();
 
         }
 

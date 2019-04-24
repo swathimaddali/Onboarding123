@@ -18,6 +18,7 @@ class CreateProduct extends React.Component {
             price: '',
             loading: false,
             showc: true,
+            errors: {}
         }
 
 
@@ -25,6 +26,7 @@ class CreateProduct extends React.Component {
         this.handleSave = this.handleSave.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleValidation = this.handleValidation.bind(this);
     }
 
     handleChange(event) {
@@ -37,7 +39,27 @@ class CreateProduct extends React.Component {
 
     }
 
-    
+    handleValidation() {
+        console.log("inside handlevalidation");
+        let name = this.state.name;
+        let price = this.state.price;
+        let errors = {};
+        let formIsValid = true;
+        if (!name) {
+            formIsValid = false;
+            errors["name"] = "Name cannot be empty";
+        }
+        if (!price) {
+            formIsValid = false;
+            errors["price"] = "Price cannot be empty";
+        }else  if (isNaN(price)) {
+            formIsValid = false;
+            errors["price"] = "Price should be numeric";
+        }
+
+        this.setState({ errors: errors });
+        return formIsValid;
+    }
 
 
 
@@ -45,10 +67,21 @@ class CreateProduct extends React.Component {
     handleSave = (event) => {
         console.log("inside handleSave" + this.state.name);
         event.preventDefault();
+
+
+
+        if (this.handleValidation()) {
+            // alert("Form submitted");
+        } else {
+            this.setState({ loading: false });
+            return;
+        }
+
+
         this.setState({ loading: true });    
     
 
-          
+       
             var formData = {
                 Name: this.state.name,
                 Price: this.state.price
@@ -113,14 +146,16 @@ class CreateProduct extends React.Component {
                                 < div className="form-group row" >
                                     <label className=" control-label col-md-12" htmlFor="Name">Name</label>
                                     <div className="col-md-4">
-                                        <input className="form-control" type="text" name="name" value={this.state.name} onChange={this.handleChange} />
+                                        <input className="form-control" type="text" autoComplete="off" name="name" value={this.state.name} onChange={this.handleChange} />
+                                        <span style={{ color: "red" }}>{this.state.errors["name"]}</span>
                                     </div>
                                 </div >
 
                                 < div className="form-group row" >
                                     <label className=" control-label col-md-12" htmlFor="Price">Price</label>
                                     <div className="col-md-4">
-                                        <input className="form-control" type="text" name="price" value={this.state.price} onChange={this.handleChange} />
+                                        <input className="form-control" type="text" name="price" autoComplete="off" value={this.state.price} onChange={this.handleChange} />
+                                        <span style={{ color: "red" }}>{this.state.errors["price"]}</span>
                                     </div>
                                 </div >
 

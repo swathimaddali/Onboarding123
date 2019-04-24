@@ -14,6 +14,7 @@ import { Button, Modal } from 'react-bootstrap';
             price: '',
             loading: true, proddata: [],
             show: true,
+            errors: {}
         };
 
         
@@ -38,6 +39,7 @@ import { Button, Modal } from 'react-bootstrap';
         this.handleSave = this.handleSave.bind(this);
         this.Change = this.Change.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleValidation = this.handleValidation.bind(this);
 
     }
 
@@ -53,7 +55,28 @@ import { Button, Modal } from 'react-bootstrap';
          // this.setState({ productname: event.target.value }, function () { console.log("is it changed noww" + this.state.productname); });
 
      }
-  
+     handleValidation() {
+         console.log("inside handlevalidation");
+         let name = this.state.name;
+         let price = this.state.price;
+         let errors = {};
+         let formIsValid = true;
+         if (!name) {
+             formIsValid = false;
+             errors["name"] = "Name cannot be empty";
+         }
+         if (!price) {
+             formIsValid = false;
+             errors["price"] = "Price cannot be empty";
+         } else if (isNaN(price)) {
+             formIsValid = false;
+             errors["price"] = "Price should be numeric";
+         }
+
+         this.setState({ errors: errors });
+         return formIsValid;
+     }
+
 
      handleClose() {
 
@@ -69,24 +92,17 @@ import { Button, Modal } from 'react-bootstrap';
         event.preventDefault();
              const data = new FormData(event.target);
 
-             // PUT request for Edit employee.  
-       
 
-          /*   if (this.state.salesdata.id) {
-                 fetch('Customer/Edit/' + this.state.salesdata.id, {
-                     method: 'PUT',
-                     body: data,
-                     headers: {'Content-Type':'application/json'}
-            }).then((response) => 
-                 {
-                    this.props.history.push("/fetchCustomer");
-                })
-        }*/
-
+             if (this.handleValidation()) {
+                 // alert("Form submitted");
+             } else {
+                 this.setState({ loading: false });
+                 return;
+             }
+               
              if (this.state.proddata.id) {
                  console.log("calling ajax");
                 
-
 
                  var formData = {
                      id: this.state.proddata.id,
@@ -161,13 +177,15 @@ import { Button, Modal } from 'react-bootstrap';
                                  < div className="form-group row" >
                                      <label className=" control-label col-md-12" htmlFor="Name">Name</label>
                                      <div className="col-md-4">
-                                         <input className="form-control" type="text" name="name" defaultValue={this.state.proddata.name} required onChange={this.Change} />
+                                         <input className="form-control" type="text" name="name" autoComplete="off" defaultValue={this.state.proddata.name} required onChange={this.Change} />
+                                         <span style={{ color: "red" }}>{this.state.errors["name"]}</span>
                                      </div>
                                  </div >
                                  < div className="form-group row" >
                                      <label className=" control-label col-md-12" htmlFor="Price">Price</label>
                                      <div className="col-md-4">
-                                         <input className="form-control" type="text" name="price" defaultValue={this.state.proddata.price} required onChange={this.Change} />
+                                         <input className="form-control" type="text" name="price" autoComplete="off" defaultValue={this.state.proddata.price} required onChange={this.Change} />
+                                         <span style={{ color: "red" }}>{this.state.errors["price"]}</span>
                                      </div>
                                  </div >
 

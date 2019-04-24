@@ -6,7 +6,7 @@ import $ from 'jquery';
 
 import axios from 'axios';
 import { Button, Modal } from 'react-bootstrap';
-import './Customer.css';
+
 
 
 
@@ -22,6 +22,7 @@ class CreateCustomer extends React.Component {
             address:'',
             loading: false,
             showc: true,
+            errors: {}
         }
 
         
@@ -29,6 +30,7 @@ class CreateCustomer extends React.Component {
         this.handleSave = this.handleSave.bind(this);     
         this.handleClose = this.handleClose.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleValidation = this.handleValidation.bind(this);
     }
 
 
@@ -51,7 +53,25 @@ class CreateCustomer extends React.Component {
 
     }
 
-   
+    handleValidation() {
+        console.log("inside handlevalidation");
+        let name = this.state.name;
+        let address = this.state.address;
+        let errors = {};
+        let formIsValid = true;
+        if (!name) {
+            formIsValid = false;
+            errors["name"] = "Name cannot be empty";
+        }
+        if (!address) {
+            formIsValid = false;
+            errors["address"] = "Address cannot be empty";
+        }
+
+        this.setState({ errors: errors });
+        console.log(this.state.errors["name"]);
+        return formIsValid;
+    }
 
 
 
@@ -59,6 +79,17 @@ class CreateCustomer extends React.Component {
     handleSave = (event) => {
         console.log("inside handleSave" + this.state.name);
         event.preventDefault();
+
+
+        if (this.handleValidation()) {
+            // alert("Form submitted");
+        } else {
+            this.setState({ loading: false });
+            return;
+        }
+
+
+
         this.setState({ loading: true });
  
         /*for (let formElementIdentifier in this.state.orderForm) {
@@ -66,7 +97,7 @@ class CreateCustomer extends React.Component {
             console.log("formData[formElementIdentifier] " + formData[formElementIdentifier]); //2
         }*/
 
-    
+        
         var formData = {
             Name: this.state.name,
             Address:this.state.address
@@ -130,23 +161,7 @@ class CreateCustomer extends React.Component {
    
 
         return (
-            /*
-            <form  id="myform" onSubmit={this.handleSave}>
-                <br />
-                Name: <input
-                    type="text"
-                    value={this.state.name}
-                    onChange={this.handleChangenm}
-                /> <br/>
-                Address: <input
-                    type="text"
-                    value={this.state.address}
-                    onChange={this.handleChangeadd}
-                /><br /><br />
-
-                <button type="submit" >Save</button>
-            </form>
-            */
+    
             <div>
             <Modal show={this.state.showc} onHide={this.handleClose}>
                 <Modal.Header closeButton>
@@ -161,14 +176,16 @@ class CreateCustomer extends React.Component {
                                 < div className="form-group row" >
                                     <label className=" control-label col-md-12" htmlFor="Name">Name</label>
                                     <div className="col-md-4">
-                                        <input className="form-control" type="text" name="name"  value={this.state.name}    onChange={this.handleChange} />
+                                        <input className="form-control" type="text" name="name" autoComplete="off"  value={this.state.name}    onChange={this.handleChange} />
+                                        <span style={{ color: "red" }}>{this.state.errors["name"]}</span>
                                     </div>
                                 </div >
 
                                 < div className="form-group row" >
                                     <label className=" control-label col-md-12" htmlFor="Address">Address</label>
                                     <div className="col-md-4">
-                                        <input className="form-control" type="text" name="address" value={this.state.address} onChange={this.handleChange} />
+                                        <input className="form-control" type="text" name="address" autoComplete="off" value={this.state.address} onChange={this.handleChange} />
+                                        <span style={{ color: "red" }}>{this.state.errors["address"]}</span>
                                     </div>
                                 </div >
                            

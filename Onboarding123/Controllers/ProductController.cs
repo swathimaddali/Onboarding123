@@ -43,20 +43,13 @@ namespace Onboarding123.Controllers
         [HttpPut]
         [Route("Edit/{id}")]
 
-        public JsonResult Edit([FromForm]Product product)
+        public IEnumerable<Product> Edit([FromForm]Product product)
         {
-            // TODO: Add update logic here
+           
 
-            if (!ModelState.IsValid)
-            {
-                return Json(new { success = false, responseText = "failed" });
-            }
+            return objproduct.UpdateProduct(product);
 
-            if (objproduct.UpdateProduct(product) == 1)
-
-                return Json(new { success = true, responseText = "succesfully updated" });
-            return Json(new { success = false, responseText = "failed" });
-
+     
         }
 
 
@@ -66,17 +59,12 @@ namespace Onboarding123.Controllers
         //FromForm works  body: contentType: "application/x-www-form-urlencoded",
         [HttpPost]
         [Route("Create")]
-        public JsonResult Create([FromForm] Product product)
+        public IEnumerable<Product> Create([FromForm] Product product)
         {
-            if (!ModelState.IsValid)
-            {
-                return Json(new { success = false, responseText = "failed" });
-            }
+            
+            return objproduct.AddProduct(product);
 
-            if (objproduct.AddProduct(product) == 1)
-
-                return Json(new { success = true, responseText = "succesfully created" });
-            return Json(new { success = false, responseText = "failed" });
+               
 
 
         }
@@ -86,14 +74,12 @@ namespace Onboarding123.Controllers
         [HttpDelete]
         [Route("Delete/{id}")]
 
-        public JsonResult Delete(int id)
+        public IEnumerable<Product> Delete(int id)
         {
             // System.Diagnostics.Debug.WriteLine("inside CustomerController:::delete::" + objcustomer.DeleteCustomer(id));
 
-            if (objproduct.DeleteProduct(id) == 1)
-                return Json(new { success = true, responseText = "succesfully deleted" });
-            else return Json(new { success = false, responseText = "failed" });
-
+            objproduct.DeleteProduct(id);
+                return objproduct.GetAllProducts();
         }
 
 

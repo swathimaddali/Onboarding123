@@ -14,6 +14,7 @@ class AddStore extends React.Component {
             address: '',
             loading: true, custdata: [],
             show: true,
+            errors: {}
         };
 
 
@@ -36,9 +37,29 @@ class AddStore extends React.Component {
         this.handleSave = this.handleSave.bind(this);
         this.Change = this.Change.bind(this);
         this.handleClose = this.handleClose.bind(this);
+        this.handleValidation = this.handleValidation.bind(this);
 
     }
 
+    handleValidation() {
+        console.log("inside handlevalidation");
+        let name = this.state.name;
+        let address = this.state.address;
+        let errors = {};
+        let formIsValid = true;
+        if (!name) {
+            formIsValid = false;
+            errors["name"] = "Name cannot be empty";
+        }
+        if (!address) {
+            formIsValid = false;
+            errors["address"] = "Address cannot be empty";
+        }
+
+        this.setState({ errors: errors });
+        console.log(this.state.errors["name"]);
+        return formIsValid;
+    }
 
     Change(event) {
 
@@ -65,9 +86,18 @@ class AddStore extends React.Component {
         event.preventDefault();
         const data = new FormData(event.target);
 
+        if (this.handleValidation()) {
+            // alert("Form submitted");
+        } else {
+            this.setState({ loading: false });
+            return;
+        }
+
+
+
         // PUT request for Edit employee.  
       
- 
+       
 
         if (this.state.custdata.id) {
             console.log("calling ajax");
@@ -142,14 +172,16 @@ class AddStore extends React.Component {
                                 < div className="form-group row" >
                                     <label className=" control-label col-md-12" htmlFor="Name">Name</label>
                                     <div className="col-md-4">
-                                        <input className="form-control" type="text" name="name" defaultValue={this.state.custdata.name} required onChange={this.Change} />
+                                        <input className="form-control" type="text" name="name" defaultValue={this.state.custdata.name} autoComplete="off" onChange={this.Change} />
+                                        <span style={{ color: "red" }}>{this.state.errors["name"]}</span>
                                     </div>
                                 </div >
                                 < div className="form-group row" >
                                     <label className=" control-label col-md-12" htmlFor="Address">Address</label>
                                     <div className="col-md-4">
-                                        <input className="form-control" type="text" name="address" defaultValue={this.state.custdata.address} required onChange={this.Change} />
-                                </div>
+                                        <input className="form-control" type="text" name="address" defaultValue={this.state.custdata.address} autoComplete="off" onChange={this.Change} />
+                                        <span style={{ color: "red" }}>{this.state.errors["address"]}</span>
+                                    </div>
                                 </div >
 
                                 

@@ -15,7 +15,9 @@ class CreateStore extends React.Component {
             name: '',
             address: '',
             loading: false,
-              showc: true,
+            showc: true,
+           
+            errors: {}
         }
 
 
@@ -23,6 +25,7 @@ class CreateStore extends React.Component {
         this.handleSave = this.handleSave.bind(this);
         this.handleClose = this.handleClose.bind(this);
         this.handleChange = this.handleChange.bind(this);
+        this.handleValidation = this.handleValidation.bind(this);
     }
 
 
@@ -33,7 +36,26 @@ class CreateStore extends React.Component {
         this.setState({ [event.target.name]: event.target.value });
 
         // this.setState({ productname: event.target.value }, function () { console.log("is it changed noww" + this.state.productname); });
+  
+    }
+    handleValidation() {
+        console.log("inside handlevalidation");
+        let name = this.state.name;
+        let address = this.state.address;
+        let errors = {};
+        let formIsValid = true;
+        if (!name) {
+            formIsValid = false;
+            errors["name"] = "Name cannot be empty";
+        } 
+        if (!address) {
+            formIsValid = false;
+            errors["address"] = "Address cannot be empty";
+        }
 
+        this.setState({ errors: errors });
+        console.log(this.state.errors["name"]);
+        return formIsValid;
     }
 
 
@@ -42,9 +64,24 @@ class CreateStore extends React.Component {
     handleSave = (event) => {
         console.log("inside handleSave" + this.state.name);
         event.preventDefault();
+
+
+        if (this.handleValidation()) {
+           // alert("Form submitted");
+        } else {
+            this.setState({ loading: false });
+            return;
+        }
+    
+
+
+
+       /* if (this.state.name == '' || this.state.address == '') {
+           // alert("Please select valid name ");
+            this.setState({ loading: false });
+            return;
+        }*/
         this.setState({ loading: true });
-
-
         var formData = {
             Name: this.state.name,
             Address: this.state.address
@@ -131,14 +168,16 @@ class CreateStore extends React.Component {
                                 < div className="form-group row" >
                                     <label className=" control-label col-md-12" htmlFor="Name">Name</label>
                                     <div className="col-md-4">
-                                        <input className="form-control" type="text" name="name" value={this.state.name} onChange={this.handleChange} />
+                                        <input className="form-control" type="text" name="name" autoComplete="off" value={this.state.name} onChange={this.handleChange} />
+                                        <span style={{ color: "red" }}>{this.state.errors["name"]}</span>
                                     </div>
                                 </div >
 
                                 < div className="form-group row" >
                                     <label className=" control-label col-md-12" htmlFor="Address">Address</label>
                                     <div className="col-md-4">
-                                        <input className="form-control" type="text" name="address" value={this.state.address} onChange={this.handleChange} />
+                                        <input className="form-control" type="text" name="address" autoComplete="off" value={this.state.address} onChange={this.handleChange} />
+                                        <span style={{ color: "red" }}>{this.state.errors["address"]}</span>
                                     </div>
                                 </div >
 
